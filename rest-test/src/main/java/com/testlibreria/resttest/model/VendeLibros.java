@@ -6,10 +6,6 @@ public class VendeLibros{
     private String autor;
     private String precio;
     
-    
-	public VendeLibros() {
-		// TODO Auto-generated constructor stub
-	}
 
 
 	public VendeLibros(String isbn, String titulo, String autor, String precio) {
