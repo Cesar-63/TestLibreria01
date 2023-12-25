@@ -1,4 +1,4 @@
-package com.testlibreria.resttest;
+package com.testlibreria.resttest.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,7 +13,7 @@ public class Libro {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long isbn;
+	private Long idLibro;
 
 	@Column(name = "titulo")
 	private String titulo;
@@ -24,41 +24,66 @@ public class Libro {
 	@Column(name = "precio")
 	private int precio;
 	
+	@Column(name = "cantidad_disponible")
+	private int cantidadDisponible;
 	
-	public Libro(String titulo, String autor, int precio) {
+	public Libro() {
+		
+	}
+	
+	public Libro(Long idLibro, String titulo, String autor, int precio, int cantidadDisponible) {
+		this.idLibro = idLibro;
 		this.titulo = titulo;
 		this.autor = autor;
 		this.precio = precio;
+		this.cantidadDisponible = cantidadDisponible;
 	}
-	public Long getIsbn() {
-		return isbn;
+
+	public Long getIdLibro() {
+		return idLibro;
 	}
-	public void setIsbn(Long isbn) {
-		this.isbn = isbn;
+
+	public void setIdLibro(Long idLibro) {
+		this.idLibro = idLibro;
 	}
+
 	public String getTitulo() {
 		return titulo;
 	}
+
 	public void setTitulo(String titulo) {
 		this.titulo = titulo;
 	}
+
 	public String getAutor() {
 		return autor;
 	}
+
 	public void setAutor(String autor) {
 		this.autor = autor;
 	}
+
 	public int getPrecio() {
 		return precio;
 	}
+
 	public void setPrecio(int precio) {
 		this.precio = precio;
 	}
-	
+
+	public int getCantidadDisponible() {
+		return cantidadDisponible;
+	}
+
+	public void setCantidadDisponible(int cantidadDisponible) {
+		this.cantidadDisponible = cantidadDisponible;
+	}
+
 	@Override
 	public String toString() {
-		return "Libro [isbn=" + isbn + ", titulo=" + titulo + ", autor=" + autor + ", precio=" + precio + "]";
+		return "Libro [idLibro=" + idLibro + ", titulo=" + titulo + ", autor=" + autor + ", precio=" + precio
+				+ ", cantidadDisponible=" + cantidadDisponible + "]";
 	}
-	
+
 	
 }

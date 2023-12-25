@@ -1,7 +1,8 @@
 package com.testlibreria.resttest.controller;
 
-import com.testlibreria.resttest.Libro;
 import com.testlibreria.resttest.RepositorioLibro;
+import com.testlibreria.resttest.ServicioLibreria;
+import com.testlibreria.resttest.entity.Libro;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class LibroController {
 	@Autowired
 	RepositorioLibro repositorioLibro;
+	
+	@Autowired
+	private ServicioLibreria servicioLibreria;
 
 	@GetMapping("/libros")
 	public ResponseEntity<List<Libro>> getAllLibros(@RequestParam(required = false) String titulo) {
@@ -50,8 +54,8 @@ public class LibroController {
 	}
 
 	@GetMapping("/libros/{isbn}")
-	public ResponseEntity<Libro> getLibroByIsbn(@PathVariable("isbn") long isbn) {
-		Optional<Libro> libroData = repositorioLibro.findById(isbn);
+	public ResponseEntity<Libro> getLibroById(@PathVariable("idLibro") long idLibro) {
+		Optional<Libro> libroData = repositorioLibro.findById(idLibro);
 
 		if (libroData.isPresent()) {
 			return new ResponseEntity<>(libroData.get(), HttpStatus.OK);
@@ -59,21 +63,32 @@ public class LibroController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	@PostMapping("/compraLibro/{idLibro}")
+    public ResponseEntity<String> compraLibro(@PathVariable Long idLibro) {
+        try {
+            servicioLibreria.compraLibro(idLibro);
+            return ResponseEntity.ok("Compra de Libro Exitosa!");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error: " + e.getMessage());
+        }
+    }
 
-	@PostMapping("/libros")
-	public ResponseEntity<Libro> createLibro(@RequestBody Libro libro) {
-		try {
-			Libro _libro = repositorioLibro
-					.save(new Libro(libro.getTitulo(), libro.getAutor(), libro.getPrecio()));
-			return new ResponseEntity<>(_libro, HttpStatus.CREATED);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+	//@PostMapping("/libros")
+	//public ResponseEntity<Libro> createLibro(@RequestBody Libro libro) {
+	//	try {
+	//		Libro _libro = repositorioLibro
+	//				.save(new Libro(null, libro.getTitulo(), libro.getAutor(), libro.getPrecio(), 10));
+	//		return new ResponseEntity<>(_libro, HttpStatus.CREATED);
+	//	} catch (Exception e) {
+	//		return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+	//	}
+	//}
 
-	@PutMapping("/libros/{isbn}")
-	public ResponseEntity<Libro> updateLibro(@PathVariable("isbn") long isbn, @RequestBody Libro libro) {
-		Optional<Libro> libroData = repositorioLibro.findById(isbn);
+	@PutMapping("/libros/{idLibro}")
+	public ResponseEntity<Libro> updateLibro(@PathVariable("idLibro") long idLibro, @RequestBody Libro libro) {
+		Optional<Libro> libroData = repositorioLibro.findById(idLibro);
 
 		if (libroData.isPresent()) {
 			Libro _libro = libroData.get();
@@ -86,10 +101,10 @@ public class LibroController {
 		}
 	}
 
-	@DeleteMapping("/libros/{isbn}")
-	public ResponseEntity<HttpStatus> deleteLibro(@PathVariable("isbn") long isbn) {
+	@DeleteMapping("/libros/{idLibro}")
+	public ResponseEntity<HttpStatus> deleteLibro(@PathVariable("idLibro") long idLibro) {
 		try {
-			repositorioLibro.deleteById(isbn);
+			repositorioLibro.deleteById(idLibro);
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
