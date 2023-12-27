@@ -25,13 +25,15 @@ public class Transaccion {
 	@ManyToOne
 	@JoinColumn(name = "idLibro")
 	private Libro libro;
+	
+	@ManyToOne
+	@JoinColumn(name = "idCliente")
+	private Cliente cliente;
 
 	public Transaccion() {
 		
 	}
 
-	
-	
 	public Long getIdTransaccion() {
 		return idTransaccion;
 	}
@@ -55,6 +57,15 @@ public class Transaccion {
 	public void setLibro(Libro libro) {
 		this.libro = libro;
 	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+
 	
 	
 	
